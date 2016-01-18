@@ -19,5 +19,9 @@
   "bugs": {
     "url": "https://github.com/dworthen/node-readfile-generator/issues"
   },
-  "homepage": "https://github.com/dworthen/node-readfile-generator#readme"
+  "homepage": "https://github.com/dworthen/node-readfile-generator#readme",
+  "dependencies": {
+    "co": "^4.6.0",
+    "mz": "^2.1.0"
+  }
 }

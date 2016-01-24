@@ -74,39 +74,10 @@ function *readFile(file, startMarker, endMarker) {
         msg = '';
         return message;
       }
-      // console.log(msg);
       return undefined;
     }
   }
   
 };
-
-function log(val) {
-  return new Promise(function(resolve, reject) {
-    console.log(val);
-    setTimeout(resolve, 1000);
-  });
-}
-
-
-// co(function* () {
-//   let it = readFile(__dirname + '/package.json');
-
-//   let p = yield it.next().value;
-
-//   // p.then(() => {
-//     for(let val of it) {
-//       // console.log(val);
-//       yield log(val);
-//     }
-//   // });
-  
-  
-// }).then(function(c) {
-//   console.log('finished ' + c);
-// }, function() {
-//   console.log('failed');
-// });
-
 
 module.exports = readFile;

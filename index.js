@@ -45,14 +45,16 @@ function *readFile(file, startMarker, endMarker) {
     if (msg) {
       console.log(true);
       if ((ind = msg.search(endMarker)) > -1) {
-        msg = msg.substring(0, ind + 1);
-        data = msg.substring(ind + 1);
+        let length = msg.match(endMarker)[0].length;
+        msg = msg.substring(0, ind + length);
+        data = msg.substring(ind + length);
         message = msg;
         msg = '';
         return message;
       } else if ((ind = data.search(endMarker)) > -1) {
-        msg += data.substring(0, ind + 1);
-        data = data.substring(ind + 1);
+        let length = data.match(endMarker)[0].length;
+        msg += data.substring(0, ind + length);
+        data = data.substring(ind + length);
         message = msg;
         msg = '';
         return message;
@@ -66,8 +68,9 @@ function *readFile(file, startMarker, endMarker) {
       msg = data.substring(ind);
       data = '';
       if ((ind = msg.search(endMarker)) > -1) {
-        data = msg.substring(ind + 1);
-        message = msg.substring(0, ind + 1);
+        let length = msg.match(endMarker)[0].length;
+        data = msg.substring(ind + length);
+        message = msg.substring(0, ind + length);
         msg = '';
         return message;
       }

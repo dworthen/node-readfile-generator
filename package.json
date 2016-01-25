@@ -1,7 +1,7 @@
 {
   "name": "readfile-generator",
   "version": "0.0.1",
-  "description": "create a generator for reading a file.",
+  "description": "Generator for reading a file.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

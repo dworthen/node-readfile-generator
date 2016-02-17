@@ -9,7 +9,7 @@ function onReadable(stream) {
   });
 };
 
-function *readFile(file, startMarker, endMarker) {
+function* readFile(file, startMarker, endMarker) {
   startMarker = startMarker || /./;
   endMarker = endMarker || /\r|\n/;
   

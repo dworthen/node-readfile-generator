@@ -10,8 +10,9 @@ function onReadable(stream) {
 };
 
 function* readFile(file, startMarker, endMarker) {
+  // default settings for csv/tsv files.
   startMarker = startMarker || /./;
-  endMarker = endMarker || /\r|\n/;
+  endMarker = endMarker || /\r\n|\r|\n/;
   
   startMarker = typeof startMarker === "string"
     ? new RegExp(startMarker, 'i')
@@ -21,61 +22,70 @@ function* readFile(file, startMarker, endMarker) {
     ? new RegExp(endMarker, 'i')
     : endMarker; 
   
-  let data = ''
+  let data = '' // Queue for whats been read from the file.
     , stream = fs.createReadStream(file)
-    , chunk
-    , msg = '';
+    , chunk // current utf8 string read from the file
+    , msg = ''
+    , lineNumber = 1;
     
   stream.setEncoding('utf8');
   
+  // Open the file for streaming.
+  // Wait for API user to advance the stream.
   yield onReadable(stream);
   
-  while ((chunk = stream.read()) != null) {
-    let message = '';
+  // begin streaming the file
+  while ((chunk = stream.read(32)) != null) {
+    let transaction = undefined;
     data += chunk;
     
-    while((message = match())) {
-      yield message;
+    // search for messages in the file
+    // transaction: { linNumber, message }
+    // linNumber: the line number the transaction started on
+    // message: startMarker + text + endMarker (inclusive)
+    while((transaction = match())) {
+      let newLines = transaction.message.match(/\r\n|\r|\n/ig);
+      lineNumber += newLines ? newLines.length : 0; 
+      yield transaction;
     }
   }
-  
+
+  /**
+   * 1. Search for start marker off the data Queue
+   * 2. Add data Queue to msg until msg contains end marker.
+   * 3. set message = msg = startMarker + text + endMarker
+   * 4. set data = content after endMarker
+   * 5. return {lineNumber, message}  
+   */
   function match() {
     let ind = -1;
     let message = '';
-    if (msg) {
-      console.log(true);
-      if ((ind = msg.search(endMarker)) > -1) {
-        let length = msg.match(endMarker)[0].length;
-        msg = msg.substring(0, ind + length);
-        data = msg.substring(ind + length);
-        message = msg;
-        msg = '';
-        return message;
-      } else if ((ind = data.search(endMarker)) > -1) {
-        let length = data.match(endMarker)[0].length;
-        msg += data.substring(0, ind + length);
-        data = data.substring(ind + length);
-        message = msg;
-        msg = '';
-        return message;
-      } else {
-        msg += data;
-        data = '';
-        return undefined;
-      }
-    } else {
-      if ((ind = data.search(startMarker)) == -1) return undefined;
+
+    // 1.
+    if(msg == '' && (ind = data.search(startMarker)) != -1) {
+      let newLines = data.substring(0, ind + 1).match(/\r\n|\r|\n/ig);
+      lineNumber += newLines ? newLines.length : 0; 
       msg = data.substring(ind);
       data = '';
-      if ((ind = msg.search(endMarker)) > -1) {
-        let length = msg.match(endMarker)[0].length;
-        data = msg.substring(ind + length);
-        message = msg.substring(0, ind + length);
-        msg = '';
-        return message;
-      }
-      return undefined;
     }
+
+    // 2.
+    msg += data;
+    data = '';
+
+    // 3, 4 & 5
+    if((ind = msg.search(endMarker)) != -1) {
+      let length = msg.match(endMarker)[0].length;
+      data = msg.substring(ind + length);
+      message = msg.substring(0, ind + length);
+      msg = '';
+      return {lineNumber: lineNumber, message: message};
+    }
+
+    // if complete message (startMarker + text + endMarker) has not been found
+    // then return to the while loop streaming over the file to obtain more data from the file
+    // and search again
+    return undefined;
   }
   
 };

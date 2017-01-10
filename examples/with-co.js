@@ -5,7 +5,8 @@ var co = require('co');
 
 function log(val) {
   return new Promise(function(resolve, reject) {
-    console.log(val);
+    console.log(val.lineNumber);
+    console.log(val.message);
     setTimeout(resolve, 1000);
   });
 }

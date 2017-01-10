@@ -20,9 +20,9 @@
     "url": "https://github.com/dworthen/node-readfile-generator/issues"
   },
   "homepage": "https://github.com/dworthen/node-readfile-generator#readme",
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
-    "co": "^4.6.0"
+    "co": "^4.6.0",
+    "prompt-promise": "^1.0.3"
   }
 }

@@ -70,8 +70,10 @@ function* readFile(file, startMarker, endMarker) {
     }
 
     // 2.
-    msg += data;
-    data = '';
+    if(msg != '') {
+      msg += data;
+      data = '';
+    }
 
     // 3, 4 & 5
     if((ind = msg.search(endMarker)) != -1) {

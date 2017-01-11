@@ -1,6 +1,6 @@
 {
   "name": "readfile-generator",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Generator for reading a file.",
   "main": "index.js",
   "scripts": {

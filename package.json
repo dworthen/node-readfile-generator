@@ -23,6 +23,7 @@
   "dependencies": {},
   "devDependencies": {
     "co": "^4.6.0",
-    "prompt-promise": "^1.0.3"
+    "prompt-promise": "^1.0.3",
+    "promptly": "^2.1.0"
   }
 }

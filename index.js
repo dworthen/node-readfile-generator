@@ -21,6 +21,9 @@ function* readFile(file, startMarker, endMarker) {
   endMarker = typeof endMarker === "string"
     ? new RegExp(endMarker, 'i')
     : endMarker; 
+
+  if(!(startMarker instanceof RegExp)) throw new Error('startMarker needs to be a RegExp.');
+  if(!(endMarker instanceof RegExp)) throw new Error('endMarker needs to be a RegExp.');
   
   let data = '' // Queue for whats been read from the file.
     , stream = fs.createReadStream(file)

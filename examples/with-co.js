@@ -20,13 +20,13 @@ function delay(ms) {
 }
 
 co(function* () {
-  // let csvIt = readFile(__dirname + '/csv-example.csv');
+  let csvIt = readFile(__dirname + '/csv-example.csv');
 
-  // yield csvIt.next().value;
+  yield csvIt.next().value;
 
-  // for(let val of csvIt) {
-  //   yield log(val);
-  // }
+  for(let val of csvIt) {
+    yield log(val);
+  }
   
   let total = '';
   let count = 0;

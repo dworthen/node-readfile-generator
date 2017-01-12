@@ -38,7 +38,7 @@ function* readFile(file, startMarker, endMarker) {
   yield onReadable(stream);
   
   // begin streaming the file
-  while ((chunk = stream.read(32)) != null) {
+  while ((chunk = stream.read()) != null) {
     let transaction = undefined;
     data += chunk;
     
